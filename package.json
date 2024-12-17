@@ -2,9 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+
+  "main": "index.js",
   "scripts": {
-    "start": "node index.ts",
+    "start": "node index.js",
     "dev": "nodemon --watch ./ --ext ts,json --exec ts-node index.ts",
     "prisma:generate": "prisma generate"
   },
