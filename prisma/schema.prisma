@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  username String   @unique
+  email    String   @unique
+  Wallet   Wallet[]
+}
+
+model Wallet {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  balance   Float         @default(0.0)
+  User      User          @relation(fields: [userId], references: [id])
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  walletId  String
+  type      String   // You can convert this to an enum if you'd like (e.g., 'income', 'expense')
+  amount    Float
+  category  String?  // Made nullable to handle cases where category might be optional
+  createdAt DateTime @default(now())  // Adding createdAt for transaction date
+  updatedAt DateTime @updatedAt      // Adding updatedAt for tracking updates
+
+  Wallet    Wallet   @relation(fields: [walletId], references: [id])
+}
