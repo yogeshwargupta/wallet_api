@@ -9,5 +9,5 @@
     "outDir": "./dist",
     "types": ["node"]
   },
-  "include": ["index.js", "routes/**/*.ts"]
+  "include": ["index.ts", "routes/**/*.ts"]
 }
