@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.ts",
+    "start": "node dist/index.js",
     "dev": "nodemon --watch ./ --ext ts,json --exec ts-node index.ts",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+  
+    "deploy": "npm run build && your-deploy-command-here" 
   },
   "keywords": [],
   "author": "",
