@@ -3,17 +3,16 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Create transaction
 export const createTransaction = async (req: Request, res: Response) => {
-  const { walletId, amount, type, category } = req.body;
+  const { walletId, amount, type, description } = req.body;  // Include description and type
 
   try {
     const transaction = await prisma.transaction.create({
       data: {
         walletId,
         amount,
-        type,
-        category,
+        type,       // 'type' field now exists in the model
+        description, // Added description field here as well
       },
     });
     res.json(transaction);
@@ -23,7 +22,6 @@ export const createTransaction = async (req: Request, res: Response) => {
   }
 };
 
-// Delete transaction
 export const deleteTransaction = async (req: Request, res: Response) => {
   const { id } = req.params;
 

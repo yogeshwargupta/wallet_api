@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+
 
 const prisma = new PrismaClient();
 
@@ -16,9 +18,24 @@ export const getUsers = async (req: Request, res: Response) => {
 
 // Create user
 export const createUser = async (req: Request, res: Response) => {
-  const { username, email } = req.body;
+  const { username, email, password } = req.body;  // Now expecting 'password' as well
+
+  if (!password) {
+    return res.status(400).json({ error: "Password is required" });
+  }
+
   try {
-    const user = await prisma.user.create({ data: { username, email } });
+    // Hash the password before saving it
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,  // Saving the hashed password
+      },
+    });
+
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
