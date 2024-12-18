@@ -5,13 +5,22 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const secret = process.env.JWT_SECRET;
 
-export const register = async (req, res) => {
-  const { username, email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await prisma.user.create({
-    data: { username, email, password: hashedPassword },
-  });
-  res.json(user);
+export const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    return res.status(500).json({ error: "JWT_SECRET is not defined" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, secret);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(401).json({ error: "Invalid token" });
+  }
 };
 
 export const login = async (req, res) => {
