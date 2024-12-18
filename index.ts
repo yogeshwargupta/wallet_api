@@ -6,6 +6,9 @@ import { PrismaClient } from "@prisma/client";
 import userRoutes from "./src/routes/userRoutes";
 import walletRoutes from "./src/routes/walletRoutes";
 import transactionRoutes from "./src/routes/transactionRoutes";
+import dotenv from "dotenv";
+dotenv.config();  // Ensure this line is present at the top
+
 
 
 const app = express();
